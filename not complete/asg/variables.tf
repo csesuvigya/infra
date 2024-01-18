@@ -1,0 +1,1 @@
+variable "lc-ami-id" {}
