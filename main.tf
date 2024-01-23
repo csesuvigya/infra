@@ -2,13 +2,18 @@ module "vpc" {
 
     source                      = "./modules/vpc/"
     vpc-cidr                    = var.vpc-cidr
-    private-subnet-cidr         = var.private-subnet-cidr
-    private-subnet-az           = var.private-subnet-az
-    public-subnet-az            = var.public-subnet-az
+    alb-subnet-az1-cidr         = var.alb-subnet-az1-cidr
+    alb-subnet-az2-cidr         = var.alb-subnet-az2-cidr
+    ecs-private-subnet-az1-cidr = var.ecs-private-subnet-az1-cidr
+    ecs-private-subnet-az2-cidr = var.ecs-private-subnet-az2-cidr
+    alb-subnet-az1              = var.alb-subnet-az1
+    alb-subnet-az2              = var.alb-subnet-az2
+    ecs-subnet-az1              = var.ecs-subnet-az1
+    ecs-subnet-az2              = var.ecs-subnet-az2
     ssh-port                    = var.ssh-port
     http-port                   = var.http-port
     allow-all-cidr              = var.allow-all-cidr
-    public-subnet-cidr          = var.public-subnet-cidr
+    
 }
 
 module "alb" {
@@ -19,7 +24,18 @@ module "alb" {
     listner-port                = var.listner-port
     listner-protocol            = var.listner-protocol
     sg-id                       = module.vpc.sg-id
-    public-subnet-id            = module.vpc.public-subnet-id
-    private-subnet-id           = module.vpc.private-subnet-id
+    alb-subnet1-id              = module.vpc.alb-subnet1-id
+    alb-subnet2-id              = module.vpc.alb-subnet2-id
     vpc-id                      = module.vpc.vpc-id
+}
+
+module "ecs" {
+
+    source                      = "./modules/ecs/"
+    ecr-url                     = var.ecr-url
+    ecs-subnet1-id              = module.vpc.ecs-subnet1-id
+    ecs-subnet2-id              = module.vpc.ecs-subnet2-id
+    lb-arn                      = module.alb.lb-arn
+    sg-id                       = module.vpc.sg-id
+    tg-arn                      = module.alb.tg-arn
 }

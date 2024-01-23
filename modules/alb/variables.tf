@@ -3,6 +3,8 @@ variable "tg-protocol" {}
 variable "listner-port" {}
 variable "listner-protocol" {}
 variable "sg-id" {}
-variable "public-subnet-id" {}
 variable "vpc-id" {}
-variable "private-subnet-id" {}
+
+variable "alb-subnet1-id" {}
+variable "alb-subnet2-id" {}
+

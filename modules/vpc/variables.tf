@@ -1,8 +1,17 @@
 variable "vpc-cidr" {}
-variable "private-subnet-cidr" {}
-variable "private-subnet-az" {}
-variable "public-subnet-az" {}
+
+variable "alb-subnet-az1-cidr" {}
+variable "alb-subnet-az2-cidr" {}
+variable "ecs-private-subnet-az1-cidr" {}
+variable "ecs-private-subnet-az2-cidr" {}
+
+
+variable "alb-subnet-az1" {}
+variable "alb-subnet-az2" {}
+variable "ecs-subnet-az1" {}
+variable "ecs-subnet-az2" {}
+
 variable "ssh-port" {}
 variable "http-port" {}
 variable "allow-all-cidr" {}
-variable "public-subnet-cidr" {}
+

@@ -3,7 +3,7 @@ resource "aws_lb" "suvi-tf-alb" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = [var.sg-id]
-  subnets            = [var.public-subnet-id, var.private-subnet-id]
+  subnets            = [var.alb-subnet1-id, var.alb-subnet2-id]
   
   enable_deletion_protection = false
 
@@ -54,7 +54,7 @@ resource "aws_lb_listener_rule" "suvi-tg-attach" {
   }
    condition {
     host_header {
-      values = ["*"]
+      values = ["*.a.*"]
     }
   }
   

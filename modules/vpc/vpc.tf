@@ -7,10 +7,31 @@ resource "aws_vpc" "suvi-tf-vpc" {
   }
 }
 
-resource "aws_subnet" "suvi-tf-private_subnet" {
+resource "aws_subnet" "suvi-tf-alb-subnet-az1" {
   vpc_id                  = aws_vpc.suvi-tf-vpc.id
-  cidr_block              = var.private-subnet-cidr
-  availability_zone       = var.private-subnet-az  
+  cidr_block              = var.alb-subnet-az1-cidr
+  availability_zone       = var.alb-subnet-az1  
+  map_public_ip_on_launch = false
+  tags = {
+    Name = "suvi-tf-alb-subnet"
+  }
+
+}
+resource "aws_subnet" "suvi-tf-alb-subnet-az2" {
+  vpc_id                  = aws_vpc.suvi-tf-vpc.id
+  cidr_block              = var.alb-subnet-az2-cidr
+  availability_zone       = var.alb-subnet-az2  
+  map_public_ip_on_launch = false
+  tags = {
+    Name = "suvi-tf-alb-subnet"
+  }
+
+}
+
+resource "aws_subnet" "suvi-tf-ecs-private-subnet-az1" {
+  vpc_id                  = aws_vpc.suvi-tf-vpc.id
+  cidr_block              = var.ecs-private-subnet-az1-cidr
+  availability_zone       = var.ecs-subnet-az1  
   map_public_ip_on_launch = false
   tags = {
     Name = "suvi-tf-private-subnet"
@@ -18,14 +39,14 @@ resource "aws_subnet" "suvi-tf-private_subnet" {
 
 }
 
-resource "aws_subnet" "suvi-tf-public_subnet" {
+resource "aws_subnet" "suvi-tf-ecs-private-subnet-az2" {
   vpc_id                  = aws_vpc.suvi-tf-vpc.id
-  cidr_block              = var.public-subnet-cidr
-  availability_zone       = var.public-subnet-az  
-  map_public_ip_on_launch = true
+  cidr_block              = var.ecs-private-subnet-az2-cidr
+  availability_zone       = var.ecs-subnet-az2  
+  map_public_ip_on_launch = false
 
   tags = {
-    Name = "suvi-tf-public-subnet"
+    Name = "suvi-tf-private-subnet"
   }
 }
 
@@ -39,7 +60,6 @@ resource "aws_internet_gateway" "suvi-tf-igw" {
 }
 
 
-# Create a route table for the public subnet
 resource "aws_route_table" "suvi-tf-public_route_table" {
   vpc_id = aws_vpc.suvi-tf-vpc.id
 
@@ -55,7 +75,12 @@ resource "aws_route_table" "suvi-tf-public_route_table" {
 
 # Associate the public route table with the public subnet
 resource "aws_route_table_association" "suvi-tf-public_subnet_association" {
-  subnet_id      = aws_subnet.suvi-tf-public_subnet.id
+  subnet_id      = aws_subnet.suvi-tf-alb-subnet-az1.id
+  route_table_id = aws_route_table.suvi-tf-public_route_table.id
+}
+
+resource "aws_route_table_association" "suvi-tf-public_subnet_association1" {
+  subnet_id      = aws_subnet.suvi-tf-alb-subnet-az2.id
   route_table_id = aws_route_table.suvi-tf-public_route_table.id
 }
 
