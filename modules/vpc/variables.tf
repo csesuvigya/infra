@@ -15,3 +15,6 @@ variable "ssh-port" {}
 variable "http-port" {}
 variable "allow-all-cidr" {}
 
+variable "container-port" {}
+
+

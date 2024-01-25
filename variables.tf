@@ -45,10 +45,10 @@ variable "ecs-subnet-az2" {
 }
 
 variable "ssh-port" {
-    default = "22"
+    default = 80
 }
 variable "http-port" {
-    default = "80"
+    default = 80
 }
 variable "allow-all-cidr" {
     default = "0.0.0.0/0"
@@ -56,13 +56,13 @@ variable "allow-all-cidr" {
 
 
 variable "tg-port" {
-    default = "80"
+    default = 80
 }
 variable "tg-protocol" {
     default = "HTTP"
 }
 variable "listner-port" {
-    default = "80"
+    default = 80
 }
 
 variable "listner-protocol" {
@@ -72,5 +72,21 @@ variable "listner-protocol" {
 #ecs variables
 
 variable "ecr-url" {
-    default = "866934333672.dkr.ecr.us-east-1.amazonaws.com/suvi-ecr-repo"
+    default = "866934333672.dkr.ecr.us-east-1.amazonaws.com/suvi-ecr-repo:latest"
+}
+
+variable "container-port" {
+  default = 5000
+}
+
+variable "container-mem" {
+  default = 512
+}
+
+variable "container-cpu" {
+  default = 256
+}
+
+variable "container-port-5000" {
+  default = 5000
 }

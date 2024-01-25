@@ -73,14 +73,13 @@ resource "aws_route_table" "suvi-tf-public_route_table" {
   }
 }
 
-# Associate the public route table with the public subnet
 resource "aws_route_table_association" "suvi-tf-public_subnet_association" {
-  subnet_id      = aws_subnet.suvi-tf-alb-subnet-az1.id
+  subnet_id      = aws_subnet.suvi-tf-ecs-private-subnet-az1.id
   route_table_id = aws_route_table.suvi-tf-public_route_table.id
 }
 
 resource "aws_route_table_association" "suvi-tf-public_subnet_association1" {
-  subnet_id      = aws_subnet.suvi-tf-alb-subnet-az2.id
+  subnet_id      = aws_subnet.suvi-tf-ecs-private-subnet-az2.id
   route_table_id = aws_route_table.suvi-tf-public_route_table.id
 }
 
@@ -100,6 +99,12 @@ resource "aws_security_group" "suvi-tf-sg" {
   ingress {
     from_port   = var.http-port
     to_port     = var.http-port
+    protocol    = "tcp"
+    cidr_blocks = [var.allow-all-cidr]
+  }
+   ingress {
+    from_port   = var.container-port
+    to_port     = var.container-port
     protocol    = "tcp"
     cidr_blocks = [var.allow-all-cidr]
   }

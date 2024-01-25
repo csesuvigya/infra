@@ -3,7 +3,7 @@ resource "aws_lb" "suvi-tf-alb" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = [var.sg-id]
-  subnets            = [var.alb-subnet1-id, var.alb-subnet2-id]
+  subnets            = [var.ecs-subnet1-id, var.ecs-subnet2-id]
   
   enable_deletion_protection = false
 
@@ -19,13 +19,10 @@ resource "aws_lb_listener" "suvi-tf-lb-listner" {
   protocol          = var.listner-protocol
 
   default_action {
-    type             = "fixed-response"
-    fixed_response {
-      content_type = "text/plain"
-      status_code  = "200"
-      message_body = "OK"
-    }
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.suvi-tf-tg.arn
   }
+
   tags = {
     Name = "suvi-tf-lb-listner"
   }
@@ -36,6 +33,7 @@ resource "aws_lb_target_group" "suvi-tf-tg" {
   name        = "suvi-lb-target-group"
   port        = var.tg-port
   protocol    = var.tg-protocol
+  target_type = "ip"
   vpc_id      = var.vpc-id
   
 
@@ -44,18 +42,3 @@ tags = {
   }
 }
 
-# Attach Target Group to Listener
-resource "aws_lb_listener_rule" "suvi-tg-attach" {
-  listener_arn = aws_lb_listener.suvi-tf-lb-listner.arn
-
-  action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.suvi-tf-tg.arn
-  }
-   condition {
-    host_header {
-      values = ["*.a.*"]
-    }
-  }
-  
-}

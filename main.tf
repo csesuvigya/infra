@@ -13,6 +13,7 @@ module "vpc" {
     ssh-port                    = var.ssh-port
     http-port                   = var.http-port
     allow-all-cidr              = var.allow-all-cidr
+    container-port              = var.container-port
     
 }
 
@@ -24,8 +25,8 @@ module "alb" {
     listner-port                = var.listner-port
     listner-protocol            = var.listner-protocol
     sg-id                       = module.vpc.sg-id
-    alb-subnet1-id              = module.vpc.alb-subnet1-id
-    alb-subnet2-id              = module.vpc.alb-subnet2-id
+    ecs-subnet1-id              = module.vpc.ecs-subnet1-id
+    ecs-subnet2-id              = module.vpc.ecs-subnet2-id
     vpc-id                      = module.vpc.vpc-id
 }
 
@@ -38,4 +39,8 @@ module "ecs" {
     lb-arn                      = module.alb.lb-arn
     sg-id                       = module.vpc.sg-id
     tg-arn                      = module.alb.tg-arn
+    container-port-5000         = var.container-port-5000
+    container-mem               = var.container-mem
+    container-cpu               = var.container-cpu
+
 }
