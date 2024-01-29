@@ -23,5 +23,10 @@ After the initialization, run the plan command to check the plan.
 
 Now, apply the terraform script to provision the resources.
 
-> terraform apply
+> terraform apply -auto-approve
 
+# Clean up
+
+It is important that you detroy the resources to so you are paying unnecessory charges to AWS. :) Below command destroys all the created resources.
+
+> terraform destroy -auto-approve
